@@ -189,11 +189,12 @@ main {
   color: #111;
 }
 
-/* 링크 한 줄(세로) 정렬 — 중복 정리 완료 */
+/* 링크 한 줄 정렬 — 왼쪽 정렬 확정 */
 .link-row {
   margin-top: 8px;
   display: flex;
   flex-direction: column; /* 버튼 위, 설명 아래 */
+  align-items: flex-start; /* ← 왼쪽 정렬 */
   gap: 8px;
 }
 
