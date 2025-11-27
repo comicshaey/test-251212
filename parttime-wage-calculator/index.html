@@ -22,6 +22,18 @@
       width:100%; box-sizing:border-box; padding:8px 10px; border:1px solid #ccc; border-radius:6px; font-size:15px;
     }
 
+    /* 공휴일·제외일 입력용 */
+    textarea {
+      width:100%;
+      box-sizing:border-box;
+      padding:8px 10px;
+      border:1px solid #ccc;
+      border-radius:6px;
+      font-size:15px;
+      resize:vertical;
+      min-height:70px;
+    }
+
     .days-grid { display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
     .day-item { display:flex; align-items:center; justify-content:space-between; border:1px solid #e6e6e6; border-radius:10px; background:#fff; padding:8px 10px; }
     .day-left { display:flex; align-items:center; gap:8px; font-weight:600; }
@@ -88,6 +100,15 @@
         <div class="hint">예: 하루 4시간 근로 시 30분 휴게 → 유급시간 3.5시간으로 계산</div>
       </div>
 
+      <!-- 공휴일·제외일 -->
+      <div class="field-row">
+        <label for="excludeDates">공휴일·계약 제외일</label>
+        <textarea id="excludeDates" placeholder="예: 2025-01-27, 2025-01-28, 2025-01-29&#10;쉼표(,) 또는 줄바꿈으로 여러 날짜 입력"></textarea>
+        <div class="hint">
+          입력한 날은 실근로·주휴수당 산정에서 모두 제외됩니다. 설 연휴, 학교 행사로 근로 안 하는 날 등 직접 넣어주세요.
+        </div>
+      </div>
+
       <div class="field-row">
         <label for="budget">예산 잔액 (원단위)</label>
         <input type="number" id="budget" placeholder="예: 1000000" />
@@ -117,11 +138,7 @@
       </div>
     </div>
 
-  </div>
   </main>
 </body>
 
 </html>
-
-
-
