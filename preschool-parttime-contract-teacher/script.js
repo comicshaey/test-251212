@@ -1,4 +1,4 @@
-// 251121 유치원 시간제근무 기간제교원 인건비 계산기 
+// 251204 유치원 시간제근무 기간제교원 인건비 계산기 
 // 졸리다
 
 function $(id){return document.getElementById(id);}
@@ -424,29 +424,72 @@ function calcMonthly(){
     </p>`;
   }
 
-  // 퇴직금 (1년 이상)
+  // ----- 퇴직금 정식 산정 서식 출력(엑셀 양식 버전) -----
   const s=parseDate($("contractStart")?.value);
   const e=parseDate($("contractEnd")?.value);
-  if(s&&e){
-    const days=diffDaysInclusive(s,e);
-    if(days>=365&&totalDays>0){
-      const daily=(totalW+totalA)/totalDays;
-      const retire=floorTo10(daily*30);
-      wrap.innerHTML+=`
-      <div class="card">
-        <h3 style="margin-top:0;font-size:15px;">퇴직금 대충 산정 (계속근로 1년 이상)</h3>
+
+  if(s && e){
+    const daysInclusive = diffDaysInclusive(s, e);
+
+    if(daysInclusive >= 365 && totalDays > 0){
+      // 평균임금 = 전체 임금 / 실제 근무일수
+      const avgDaily = (totalW + totalA) / totalDays;
+      const avgDailyRounded = Math.round(avgDaily);
+      const retireAmt = floorTo10(avgDaily * 30);
+
+      wrap.innerHTML += `
+      <div class="card" style="margin-top:18px;">
+        <h3 style="margin-top:0;font-size:16px;">퇴직금 산정서</h3>
+
         <p class="hint">
-          ·계약기간 달력일수: ${days}일 기준<br/>
-          ·계약기간 전체 임금을 달력일수로 나눈 1일 평균임금 *30일. 원단위 절삭
+          ·계약기간 달력일수: ${daysInclusive}일 / 실제 근무일수: ${totalDays}일<br/>
+          ·계약기간 전체 임금 기준으로 평균임금(1일) 산정 후 30일분 계산
         </p>
-        <p><b>예상 퇴직금(개략): ${formatWon(retire)}</b></p>
-      </div>`;
+
+        <div class="table-wrap" style="margin-top:10px;">
+          <table>
+            <thead>
+              <tr>
+                <th>구분</th>
+                <th>금액</th>
+                <th>비고</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>① 계약기간 총 임금</td>
+                <td>${formatWon(totalW + totalA)}</td>
+                <td>기본급 + 각종 수당 + 연 단위 분배 합산</td>
+              </tr>
+              <tr>
+                <td>② 실제 근무일수</td>
+                <td>${totalDays}일</td>
+                <td>학기중 + 방학 + 미운영 일수 합계</td>
+              </tr>
+              <tr>
+                <td>③ 1일 평균임금 (① ÷ ②)</td>
+                <td>${formatWon(avgDailyRounded)}</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>④ 평균임금 30일분 (③ × 30)</td>
+                <td><b>${formatWon(retireAmt)}</b></td>
+                <td>퇴직금 산정액</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:10px;"><b>예상 퇴직금: ${formatWon(retireAmt)}</b></p>
+      </div>
+      `;
     }else{
-      wrap.innerHTML+=`
-      <div class="card">
-        <h3 style="margin-top:0;font-size:15px;">퇴직금 개략 산정</h3>
-        <p>계약기간이 1년 미만(달력일수 ${days}일)으로 퇴직금 지급 대상이 아닐 수 있음</p>
-      </div>`;
+      wrap.innerHTML += `
+      <div class="card" style="margin-top:18px;">
+        <h3 style="margin-top:0;font-size:16px;">퇴직금 산정</h3>
+        <p>계약기간 ${daysInclusive}일 → 1년 미만 근무로 퇴직금 지급 요건 미충족 가능</p>
+      </div>
+      `;
     }
   }
 }
