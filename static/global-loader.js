@@ -123,3 +123,39 @@
   // });
 
 })();
+
+
+// static/global-loader.js
+(async function () {
+  try {
+    const load = async (url) => {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(url);
+      return await res.text();
+    };
+
+    /* ===== 헤더 삽입 ===== */
+    if (!document.querySelector(".site-header")) {
+      const headerHTML = await load("/static/header.html");
+      document.body.insertAdjacentHTML("afterbegin", headerHTML);
+    }
+
+    /* ===== 푸터 삽입 ===== */
+    if (!document.querySelector(".site-footer")) {
+      const footerHTML = await load("/static/footer.html");
+      document.body.insertAdjacentHTML("beforeend", footerHTML);
+    }
+
+    /* ===== 현재 페이지 메뉴 active 처리 ===== */
+    const path = location.pathname.replace(/\/$/, "");
+    document.querySelectorAll(".nav-link").forEach(link => {
+      const href = link.getAttribute("href")?.replace(/\/$/, "");
+      if (href && path.startsWith(href)) {
+        link.classList.add("nav-link-active");
+      }
+    });
+
+  } catch (e) {
+    console.warn("global layout loader failed:", e);
+  }
+})();
