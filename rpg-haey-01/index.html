@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>Kohaeyoung RPG 시뮬레이터 (웹버전)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* 대충 깔끔하게 보이게만 하는 스타일 */
+
+    :root {
+      --bg: #020617;
+      --panel: #0f172a;
+      --panel-soft: #020617;
+      --border: #1e293b;
+      --accent: #38bdf8;
+      --accent-soft: #0ea5e9;
+      --text: #e5e7eb;
+      --sub: #9ca3af;
+      --danger: #f97373;
+      --note: #facc15;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", "Apple SD Gothic Neo",
+        "Noto Sans KR", sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 55%);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 1.5rem;
+      color: var(--accent);
+    }
+
+    .subtitle {
+      margin-bottom: 16px;
+      font-size: 0.9rem;
+      color: var(--sub);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: linear-gradient(145deg, var(--panel), var(--panel-soft));
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.7);
+    }
+
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 1.1rem;
+      color: var(--accent-soft);
+    }
+
+    .identity-list {
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .identity-list dt {
+      font-weight: 600;
+      margin-top: 4px;
+      color: var(--sub);
+    }
+
+    .identity-list dd {
+      margin: 0 0 4px;
+    }
+
+    .status-line {
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+
+    .status-line strong {
+      color: var(--accent);
+    }
+
+    .status-disease {
+      font-size: 0.8rem;
+      color: var(--sub);
+      margin-top: 4px;
+      white-space: pre-line;
+    }
+
+    .gauge-wrap {
+      margin: 6px 0;
+    }
+
+    .gauge-label {
+      font-size: 0.8rem;
+      color: var(--sub);
+      margin-bottom: 2px;
+    }
+
+    .gauge-bar {
+      position: relative;
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: #020617;
+      overflow: hidden;
+    }
+
+    .gauge-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(to right, #22c55e, #eab308, #ef4444);
+      transition: width 0.2s ease-out;
+    }
+
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    button.action {
+      border-radius: 10px;
+      border: 1px solid #1e293b;
+      background: radial-gradient(circle at top left, #1e293b 0, #020617 70%);
+      color: var(--text);
+      padding: 8px 10px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-align: left;
+      transition: transform 0.1s ease-out, box-shadow 0.1s ease-out,
+        border-color 0.1s ease-out, background 0.1s ease-out;
+    }
+
+    button.action span.label {
+      display: block;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    button.action span.desc {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--sub);
+      margin-top: 2px;
+    }
+
+    button.action:hover {
+      transform: translateY(-1px);
+      border-color: var(--accent-soft);
+      box-shadow: 0 10px 20px rgba(56, 189, 248, 0.25);
+      background: radial-gradient(circle at top left, #0f172a 0, #020617 80%);
+    }
+
+    button.action.danger span.label {
+      color: var(--danger);
+    }
+
+    .small-note {
+      margin-top: 6px;
+      font-size: 0.75rem;
+      color: var(--sub);
+    }
+
+    .log-card {
+      margin-top: 12px;
+    }
+
+    .log-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .log-title {
+      font-size: 0.95rem;
+      color: var(--accent-soft);
+    }
+
+    .log-controls {
+      display: flex;
+      gap: 4px;
+    }
+
+    .log-controls button {
+      border-radius: 8px;
+      border: 1px solid #1e293b;
+      background: #020617;
+      color: var(--sub);
+      font-size: 0.75rem;
+      padding: 3px 6px;
+      cursor: pointer;
+    }
+
+    .log-controls button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .log-view {
+      margin-top: 6px;
+      background: #020617;
+      border-radius: 10px;
+      padding: 8px;
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+        Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.8rem;
+      height: 240px;
+      overflow-y: auto;
+      border: 1px solid #1e293b;
+    }
+
+    .log-line-system {
+      color: #7dd3fc;
+    }
+
+    .log-line-action {
+      color: #a5b4fc;
+    }
+
+    .log-line-alert {
+      color: #f97373;
+    }
+
+    .log-line-note {
+      color: #facc15;
+    }
+
+    .log-line-time {
+      color: #6b7280;
+    }
+
+    .footer-note {
+      margin-top: 10px;
+      font-size: 0.75rem;
+      color: var(--sub);
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>Kohaeyoung RPG 시뮬레이터 (웹버전)</h1>
+    <div class="subtitle">
+      고주무관의 하루를 <strong>“에너지 / 감정 / 기면증 모듈”</strong>로 굴려보는
+      작은 웹 RPG. 버튼 눌러보면서 정체성과 병을 분리해서 바라보는 연습용 장난감.
+    </div>
+
+    <div class="layout">
+      <!-- 왼쪽: 정체성 + 상태 + 액션 -->
+      <div class="card">
+        <h2>정체성 · Kohaeyoung</h2>
+        <dl class="identity-list" id="identity-summary">
+          <!-- JS에서 채워 넣을 예정 -->
+        </dl>
+
+        <div style="margin-top:8px;">
+          <div class="status-line" id="status-energy"></div>
+          <div class="status-line" id="status-emotion"></div>
+          <div class="status-disease" id="status-disease"></div>
+
+          <div class="gauge-wrap">
+            <div class="gauge-label">에너지</div>
+            <div class="gauge-bar">
+              <div class="gauge-fill" id="gauge-energy" style="width:50%;"></div>
+            </div>
+          </div>
+          <div class="gauge-wrap">
+            <div class="gauge-label">감정 수준</div>
+            <div class="gauge-bar">
+              <div class="gauge-fill" id="gauge-emotion" style="width:40%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions-grid">
+          <button class="action" id="btn-work">
+            <span class="label">행정업무 하기</span>
+            <span class="desc">에너지 소모, 감정 약간 상승</span>
+          </button>
+          <button class="action" id="btn-creative">
+            <span class="label">창작하기</span>
+            <span class="desc">에너지 조금 소모, 감정 크게 상승</span>
+          </button>
+          <button class="action" id="btn-nap">
+            <span class="label">낮잠 자기</span>
+            <span class="desc">에너지 회복, 감정 약간 안정</span>
+          </button>
+          <button class="action danger" id="btn-meltdown">
+            <span class="label">감정 과부하</span>
+            <span class="desc">감정 급등, 에너지 급감 (위험 이벤트)</span>
+          </button>
+          <button class="action" id="btn-sim-day">
+            <span class="label">하루 시뮬레이션</span>
+            <span class="desc">기면증 모듈이 오늘 하루에 개입했는지 확인</span>
+          </button>
+          <button class="action" id="btn-status">
+            <span class="label">상태 새로고침</span>
+            <span class="desc">위쪽 상태 표시 갱신</span>
+          </button>
+        </div>
+
+        <div class="small-note">
+          ※ 시간/분은 기본값 사용. 나중에 슬라이더나 입력칸 추가해서 바꾸기 가능.
+        </div>
+      </div>
+
+      <!-- 오른쪽: 로그 -->
+      <div class="card log-card">
+        <div class="log-header-row">
+          <div class="log-title">RPG 로그</div>
+          <div class="log-controls">
+            <button id="btn-log-today">오늘 요약</button>
+            <button id="btn-log-clear">로그 지우기</button>
+          </div>
+        </div>
+        <div class="log-view" id="log-view"></div>
+
+        <div class="footer-note">
+          로그는 <span style="color:#7dd3fc;">[시스템]</span>,
+          <span style="color:#a5b4fc;">▶ 행동</span>,
+          <span style="color:#facc15;">◆ 하루 시뮬</span>,
+          <span style="color:#f97373;">‼ 경고</span>로 구분.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============================
+    // Kohaeyoung RPG 웹버전 로직
+    // ============================
+
+    // 정체성, 기면증 모듈, 엔티티를 JS 객체로 대충 흉내냄
+
+    const identityCore = {
+      name: "Kohaeyoung",
+      roles: ["교육행정 실무자", "창작자(만화/에세이)", "자동화 도구 개발자"],
+      values: ["고통을 구조로 바꾸기", "약자 친화적인 행정", "재미있고 쓸모있는 것 만들기"],
+      skills: ["엑셀/인건비 설계", "파이썬·웹 기초 개발", "글·그림으로 이야기 만들기", "업무 프로세스 분석"],
+    };
+
+    const narcolepsyModule = {
+      baselineSleepiness: 60,
+      emotionTriggerSensitivity: 80,
+      safetyRiskLevel: 70,
+      lastNapTime: null,
+    };
+
+    const ko = {
+      energy: 50,
+      emotion: 40,
+      logs: [], // 여기서는 텍스트 로그가 아니라, DayLog 비슷한 걸 쌓을 수도 있음
+    };
+
+    // 날짜 포맷용. 그냥 간단하게만.
+    function formatDate(d) {
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      const dd = String(d.getDate()).padStart(2, "0");
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    // 병 모듈 tick: 발작 계산
+    function diseaseTick(emotion, fatigue) {
+      const base = narcolepsyModule.baselineSleepiness;
+      const sens = narcolepsyModule.emotionTriggerSensitivity;
+
+      let triggerScore =
+        base * 0.4 + emotion * (sens / 100) * 0.3 + fatigue * 0.3;
+
+      if (triggerScore < 0) triggerScore = 0;
+      if (triggerScore > 100) triggerScore = 100;
+
+      const roll = Math.random() * 100;
+      const eventHappened = roll < triggerScore;
+
+      const result = {
+        triggerScore: Math.round(triggerScore * 10) / 10,
+        sleepAttack: false,
+        cataplexy: false,
+      };
+
+      if (eventHappened) {
+        if (Math.random() < 0.5) {
+          result.sleepAttack = true;
+        } else {
+          result.cataplexy = true;
+        }
+      }
+
+      return result;
+    }
+
+    // 에너지/감정 값 강제로 0~100 사이로 유지
+    function clampState() {
+      ko.energy = Math.max(0, Math.min(100, ko.energy));
+      ko.emotion = Math.max(0, Math.min(100, ko.emotion));
+    }
+
+    // -----------------------------
+    // UI 요소 핸들링
+    // -----------------------------
+
+    const $identity = document.getElementById("identity-summary");
+    const $statusEnergy = document.getElementById("status-energy");
+    const $statusEmotion = document.getElementById("status-emotion");
+    const $statusDisease = document.getElementById("status-disease");
+    const $gaugeEnergy = document.getElementById("gauge-energy");
+    const $gaugeEmotion = document.getElementById("gauge-emotion");
+    const $logView = document.getElementById("log-view");
+
+    function renderIdentity() {
+      // dl 요소에 identityCore 내용 채우기
+      $identity.innerHTML = `
+        <dt>이름</dt>
+        <dd>${identityCore.name}</dd>
+        <dt>역할</dt>
+        <dd>${identityCore.roles.join(", ")}</dd>
+        <dt>가치</dt>
+        <dd>${identityCore.values.join(", ")}</dd>
+        <dt>능력</dt>
+        <dd>${identityCore.skills.join(", ")}</dd>
+      `;
+    }
+
+    function renderStatus() {
+      $statusEnergy.textContent = `에너지: ${ko.energy}`;
+      $statusEmotion.textContent = `감정 수준: ${ko.emotion}`;
+
+      const diseaseText =
+        `[기면증 모듈 상태]\n` +
+        `- 기본 졸림: ${narcolepsyModule.baselineSleepiness}\n` +
+        `- 감정 자극 민감도: ${narcolepsyModule.emotionTriggerSensitivity}\n` +
+        `- 안전 리스크: ${narcolepsyModule.safetyRiskLevel}`;
+      $statusDisease.textContent = diseaseText;
+
+      $gaugeEnergy.style.width = `${ko.energy}%`;
+      $gaugeEmotion.style.width = `${ko.emotion}%`;
+    }
+
+    // 로그 찍기용 함수들
+    function appendLog(line, className) {
+      const div = document.createElement("div");
+      div.className = className;
+      div.textContent = line;
+      $logView.appendChild(div);
+      $logView.scrollTop = $logView.scrollHeight;
+    }
+
+    function logSystem(msg) {
+      appendLog(`[시스템] ${msg}`, "log-line-system");
+    }
+
+    function logAction(msg) {
+      appendLog(`▶ ${msg}`, "log-line-action");
+    }
+
+    function logAlert(msg) {
+      appendLog(`‼ ${msg}`, "log-line-alert");
+    }
+
+    function logNote(msg) {
+      appendLog(`◆ ${msg}`, "log-line-note");
+    }
+
+    // -----------------------------
+    // 행동 함수들 (원래 파이썬 메서드들)
+    // -----------------------------
+
+    function doWork(hours = 2) {
+      const before = ko.energy;
+      ko.energy -= 5 * hours;
+      ko.emotion += 5;
+      clampState();
+      return `${hours}시간 행정업무를 했다. 에너지 ${before} → ${ko.energy}, 감정 ${ko.emotion}.`;
+    }
+
+    function doCreative(hours = 1) {
+      const before = ko.energy;
+      ko.energy -= 3 * hours;
+      ko.emotion += 10;
+      clampState();
+      return `${hours}시간 창작했다. 에너지 ${before} → ${ko.energy}, 감정 ${ko.emotion}.`;
+    }
+
+    function takeNap(minutes = 20) {
+      const before = ko.energy;
+      ko.energy += Math.floor(minutes / 5);
+      ko.emotion -= 5;
+      clampState();
+      narcolepsyModule.lastNapTime = new Date();
+      return `${minutes}분 낮잠. 에너지 ${before} → ${ko.energy}, 감정 ${ko.emotion}.`;
+    }
+
+    function meltdown() {
+      const beforeE = ko.energy;
+      const beforeEm = ko.emotion;
+      ko.emotion = Math.min(100, ko.emotion + 40);
+      ko.energy = Math.max(0, ko.energy - 20);
+      clampState();
+      return `감정 과부하! 감정 ${beforeEm} → ${ko.emotion}, 에너지 ${beforeE} → ${ko.energy}.`;
+    }
+
+    function simulateDay(moodLabel = "보통") {
+      const fatigue = 100 - ko.energy;
+      const result = diseaseTick(ko.emotion, fatigue);
+      const today = formatDate(new Date());
+
+      const notes = [];
+
+      if (result.sleepAttack) {
+        notes.push("예상치 못한 수면발작이 찾아왔다. (갑자기 잠듦)");
+        ko.energy += 10;
+      }
+      if (result.cataplexy) {
+        notes.push("감정 자극 후 탈력(허탈) 발작이 왔다.");
+        ko.energy -= 10;
+      }
+
+      if (notes.length === 0) {
+        notes.push("특별한 발작 없이 하루를 버텼다.");
+      }
+
+      notes.push(
+        `트리거 점수: ${result.triggerScore} (emotion=${ko.emotion}, fatigue=${fatigue})`
+      );
+
+      clampState();
+
+      // 우리 쪽 로그에도 적당히 넣어두자
+      const dayLog = {
+        date: today,
+        mood: moodLabel,
+        energy: ko.energy,
+        notes,
+      };
+      ko.logs.push(dayLog);
+
+      return dayLog;
+    }
+
+    // -----------------------------
+    // 버튼 이벤트 연결
+    // -----------------------------
+
+    document.getElementById("btn-work").addEventListener("click", () => {
+      const msg = doWork(2); // 기본 2시간
+      logAction(msg);
+      renderStatus();
+    });
+
+    document.getElementById("btn-creative").addEventListener("click", () => {
+      const msg = doCreative(1); // 기본 1시간
+      logAction(msg);
+      renderStatus();
+    });
+
+    document.getElementById("btn-nap").addEventListener("click", () => {
+      const msg = takeNap(20); // 기본 20분
+      logAction(msg);
+      renderStatus();
+    });
+
+    document.getElementById("btn-meltdown").addEventListener("click", () => {
+      const ok = confirm("정말 감정 과부하로 처리할까요?");
+      if (!ok) return;
+      const msg = meltdown();
+      logAlert(msg);
+      renderStatus();
+    });
+
+    document.getElementById("btn-sim-day").addEventListener("click", () => {
+      const mood = prompt("오늘 하루를 한 단어로 적어볼까요? (예: 버텨낸 날)", "보통") || "보통";
+      const log = simulateDay(mood);
+      logNote(`[${log.date}] 하루 시뮬레이션 (${log.mood})`);
+      log.notes.forEach((n) => logNote("  · " + n));
+      renderStatus();
+    });
+
+    document.getElementById("btn-status").addEventListener("click", () => {
+      renderStatus();
+      logSystem("상태를 새로고침했습니다.");
+    });
+
+    document.getElementById("btn-log-clear").addEventListener("click", () => {
+      $logView.innerHTML = "";
+      logSystem("로그를 초기화했습니다.");
+    });
+
+    document.getElementById("btn-log-today").addEventListener("click", () => {
+      if (ko.logs.length === 0) {
+        logSystem("아직 하루 시뮬레이션 로그가 없어요.");
+        return;
+      }
+      const last = ko.logs[ko.logs.length - 1];
+      logNote(`[오늘 요약] ${last.date} / 기분: ${last.mood} / 에너지: ${last.energy}`);
+      last.notes.forEach((n) => logNote("  · " + n));
+    });
+
+    // -----------------------------
+    // 초기 렌더링
+    // -----------------------------
+    renderIdentity();
+    renderStatus();
+    logSystem("Kohaeyoung RPG 웹 시뮬레이터 시작.");
+    logSystem("버튼을 눌러서 하루를 돌려보세요.");
+  </script>
+</body>
+</html>

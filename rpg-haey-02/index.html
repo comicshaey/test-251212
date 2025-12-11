@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>Kohaeyoung RPG · Phaser 버전</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Phaser CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.0/dist/phaser.js"></script>
+  <style>
+    body {
+      margin: 0;
+      background: #020617;
+      color: #e5e7eb;
+      font-family: system-ui, -apple-system, "Segoe UI", "Apple SD Gothic Neo",
+        "Noto Sans KR", sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    #game-container {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.8);
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container"></div>
+  <script src="game.js"></script>
+</body>
+</html>
