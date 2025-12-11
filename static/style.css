@@ -1,337 +1,276 @@
-/* ============================
-   기본 세팅
-   ============================ */
+/* 251212 공통 스타일 (통합본 v3)
+   - 베이스: 기존 style
+   - 테마: 두 번째 style의 원래 파스텔 분홍
+   - 구조: 중앙 화이트 + 좌우 파스텔 배경
+*/
 
-* {
-  box-sizing: border-box;
+/* =============================
+   박스 모델 통일
+   ============================= */
+* { box-sizing: border-box; }
+
+/* =============================
+   컬러 변수 (두 번째 style 원본 색상)
+   ============================= */
+:root {
+  --accent-pink: #ffc7de;        /* 기본 파스텔 분홍 */
+  --accent-pink-soft: #ffe9f3;   /* 사이드 배경용 */
+  --accent-pink-strong: #ff9fba; /* hover / active */
+
+  --border-light: #e5e5e5;
+
+  --text-main: #111111;
+  --text-muted: #666666;
+
+  --bg-body: var(--accent-pink-soft);
+  --bg-page: #ffffff;
 }
 
-html {
-  font-size: 16px;
-}
+/* =============================
+   기본 타이포 & 반응형
+   ============================= */
+html { font-size: 16px; }
 
 @media (max-width: 600px) {
-  html {
-    font-size: 15px;
-  }
+  html { font-size: 15px; }
 }
 
 body {
   margin: 0;
   padding: 0;
-  background: #f5f5f7;
-  color: #111;
+  background: var(--bg-body); /* ★ 양쪽 사이드 색 */
+  color: var(--text-main);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
     Arial, "Apple SD Gothic Neo", "Noto Sans KR", "맑은 고딕", sans-serif;
   line-height: 1.5;
   word-break: keep-all;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+/* 링크 */
+a { text-decoration: none; color: inherit; }
 
-a:hover {
-  text-decoration: underline;
-}
-
-/* ============================
-   컬러 변수 (블루 제거)
-   ============================ */
-
-:root {
-  --accent-soft: #e9dfe6;
-  --accent-soft-strong: #dcc9d6;
-  --accent-soft-bg: #f6f1f4;
-}
-
-/* ============================
-   헤더 / 내비게이션
-   ============================ */
-
-.site-header {
-  background: #ffffff;
-  border-bottom: 1px solid #e3e3e3;
-}
-
-.header-inner {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 16px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.site-title {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 700;
-}
-
-.site-subtitle {
-  margin: 4px 0 0;
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.site-nav {
-  position: relative;
-}
-
-.nav-toggle {
-  display: none;
-  border: 1px solid #ccc;
-  border-radius: 999px;
-  padding: 6px 12px;
-  background: #fff;
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-
-.nav-list {
-  display: flex;
-  gap: 10px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  font-size: 0.9rem;
-}
-
-.nav-list a {
-  padding: 6px 10px;
-  border-radius: 999px;
-}
-
-.nav-list a:hover {
-  background: #f0f0f3;
-}
-
-.nav-list a.is-active {
-  background: var(--accent-soft-strong);
-  color: #111;
-}
-
-/* 모바일 메뉴 */
-@media (max-width: 720px) {
-  .header-inner {
-    align-items: flex-start;
-  }
-  .nav-toggle {
-    display: inline-block;
-  }
-  .nav-list {
-    display: none;
-    flex-direction: column;
-    margin-top: 8px;
-    background: #fff;
-    border-radius: 12px;
-    padding: 8px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
-  }
-  .nav-list.is-open {
-    display: flex;
-  }
-}
-
-/* ============================
-   메인 레이아웃 / 카드
-   ============================ */
-
-.page-main {
-  max-width: 960px;
-  margin: 0 auto;
+/* =============================
+   페이지 중앙 래퍼 (화이트 카드)
+   ============================= */
+.page-wrap,
+main {
+  max-width: 880px;
+  margin: 24px auto 40px;
   padding: 24px 16px 40px;
+  background: var(--bg-page);
+  border-radius: 24px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.04);
 }
 
-.card {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 18px 16px 20px;
-  margin-bottom: 16px;
-  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
+/* =============================
+   헤더
+   ============================= */
+.site-header {
+  background: var(--bg-page);
+  border-bottom: 1px solid var(--border-light);
 }
 
-.card h2 {
-  margin-top: 0;
-  font-size: 1.1rem;
+.site-header-inner {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 20px 16px 12px;
 }
 
-.notice-card {
-  border-left: 4px solid var(--accent-soft-strong);
+/* 타이틀 */
+.site-title-wrap { margin-bottom: 14px; }
+
+.site-title-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
 }
 
-/* ============================
-   바로가기 카드
-   ============================ */
-
-.quick-links-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+.site-logo-badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: var(--accent-pink-soft);
+  border: 1px solid var(--accent-pink-strong);
 }
 
-@media (max-width: 900px) {
-  .quick-links-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+/* ★ 최상단 메인 타이틀 2배 */
+.site-title-text {
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 @media (max-width: 600px) {
-  .quick-links-grid {
-    grid-template-columns: 1fr;
-  }
+  .site-title-text { font-size: 1.8rem; }
 }
 
-.quick-link {
-  display: block;
-  padding: 12px 12px 14px;
-  border-radius: 12px;
-  border: 1px solid #e3e3e8;
-  background: #fafafe;
-}
-
-.quick-link h3 {
-  margin: 0 0 4px;
-  font-size: 0.98rem;
-}
-
-.quick-link p {
-  margin: 0;
-  font-size: 0.86rem;
-  color: #555;
-}
-
-.quick-link:hover {
-  border-color: var(--accent-soft-strong);
-  background: var(--accent-soft-bg);
-  text-decoration: none;
-}
-
-/* ============================
-   리스트 / 표 / 기타 요소
-   ============================ */
-
-.step-list,
-.bullet-list {
-  margin: 8px 0 0;
-  padding-left: 1.1rem;
-}
-
-.step-list li,
-.bullet-list li {
-  margin-bottom: 6px;
-}
-
-.info-text {
-  margin-top: 8px;
-  font-size: 0.9rem;
-  color: #444;
-}
-
-.small-text {
-  font-size: 0.82rem;
-  color: #666;
-}
-
-.simple-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 8px;
-  font-size: 0.9rem;
-}
-
-.simple-table th,
-.simple-table td {
-  border: 1px solid #e1e1e1;
-  padding: 6px 8px;
-}
-
-.simple-table th {
-  background: #f4f5fb;
-}
-
-/* FAQ */
-
-.faq-item {
-  border-top: 1px solid #ececf2;
-  padding-top: 10px;
-  margin-top: 10px;
-}
-
-.faq-q {
+.sub {
+  margin: 6px 0 0;
   font-size: 0.95rem;
-  margin: 0 0 4px;
+  color: var(--text-muted);
 }
 
-.faq-a {
-  margin: 0 0 4px;
-  font-size: 0.9rem;
+/* =============================
+   네비게이션
+   ============================= */
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.faq-tip {
-  margin: 0;
-  font-size: 0.82rem;
-  color: #666;
-}
-
-/* 에러 항목 */
-
-.error-item h3 {
-  margin-bottom: 4px;
-  font-size: 0.98rem;
-}
-
-/* ============================
-   푸터
-   ============================ */
-
-.site-footer {
-  border-top: 1px solid #e3e3e3;
-  background: #ffffff;
-}
-
-.footer-inner {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 12px 16px 18px;
-  font-size: 0.85rem;
-  color: #555;
-}
-
-.footer-main {
-  margin: 0 0 4px;
-}
-
-.footer-meta {
-  margin: 0 0 8px;
-  font-size: 0.8rem;
-  color: #888;
-}
-
-/* ============================
-   작성자 메모
-   ============================ */
-
-.dev-note-toggle {
+.nav-link {
+  padding: 6px 14px;
   border-radius: 999px;
-  border: 1px dashed #bbb;
-  padding: 5px 10px;
-  font-size: 0.78rem;
-  background: #fafafa;
+  font-size: 0.9rem;
+  background: #fff;
+  border: 1px solid var(--accent-pink);
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover,
+.nav-link-active {
+  background: var(--accent-pink);
+  border-color: var(--accent-pink-strong);
+  transform: translateY(-1px);
+}
+
+/* =============================
+   히어로 (본문 타이틀은 정상 크기)
+   ============================= */
+.hero {
+  margin: 8px 0 28px;
+}
+
+.hero-title {
+  font-size: 2.2rem; /* 정상 h1 느낌 */
+  line-height: 1.25;
+  margin: 0 0 12px;
+}
+
+@media (max-width: 600px) {
+  .hero-title { font-size: 1.8rem; }
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+/* =============================
+   카드 그리드 (그림자 유지)
+   ============================= */
+.section-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.section-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px 18px 18px;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+}
+
+.section-title {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+}
+
+.section-desc {
+  margin: 0 0 16px;
+  font-size: 0.94rem;
+  color: var(--text-muted);
+}
+
+/* =============================
+   버튼
+   ============================= */
+.btn,
+.btn-primary,
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.15s ease;
 }
 
-.dev-note {
-  border: 1px dashed #dadada;
-  background: #fdfdfd;
-  font-size: 0.86rem;
+.btn,
+.btn-outline {
+  background: #fff;
+  border: 1px solid var(--accent-pink);
 }
 
-.dev-note.is-hidden {
-  display: none;
+.btn-primary {
+  background: var(--accent-pink);
+  border: 1px solid var(--accent-pink-strong);
 }
- 
+
+.btn:hover,
+.btn-outline:hover,
+.btn-primary:hover {
+  background: var(--accent-pink-strong);
+  transform: translateY(-1px);
+}
+
+/* =============================
+   섹션 (기존 스타일 유지)
+   ============================= */
+.section {
+  margin: 20px 0;
+  padding: 20px 22px;
+  border-radius: 16px;
+  border: 1px solid var(--border-light);
+  background: #fff;
+}
+
+/* =============================
+   푸터
+   ============================= */
+.site-footer {
+  margin-top: 40px;
+  padding: 20px 16px 32px;
+  background: transparent;
+  text-align: center;
+}
+
+.footer-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* =============================
+   입력 UI
+   ============================= */
+input, select, textarea {
+  font: inherit;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #d9d9e3;
+  background: #f9fafb;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent-pink-strong);
+  box-shadow: 0 0 0 2px rgba(255,159,186,0.25);
+}
+
+/* =============================
+   테이블 / 기타 (기존 유지)
+   ============================= */
+hr {
+  border-top: 1px solid #ddd;
+  margin: 26px 0;
+}
