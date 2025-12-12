@@ -1,629 +1,477 @@
-/* 251212 공통 스타일 (통합본 v2)
-   - 베이스: 251204목(기존)
-   - 레이아웃/네비/테마: 251212(새)
-   - 수정: 핑크를 훨씬 연하게(회색기 섞임), 헤더 타이틀 2배↑, 히어로 타이틀 정상화
-*/
+/* ============================
+   공통 스타일 (교직원용 사이트)
+   ============================ */
 
 /* 박스 모델 통일 */
-* { box-sizing: border-box; }
-
-/* =============================
-   컬러 변수 (연한 파스텔 분홍 + 연회색 톤)
-   ============================= */
-:root{
-  --accent-pink: #f3e6ec;        /* 기본 테두리/버튼 */
-  --accent-pink-soft: #faf6f8;   /* 아주 연한 배경용 */
-  --accent-pink-strong: #e6c9d6; /* hover/active 강조 */
-
-  --border-light: #e5e5e5;
-
-  --text-main: #111111;
-  --text-muted: #666666;
-
-  --bg-body: #ffffff;
-
-  /* 기존에서 쓰던 느낌 유지용 */
-  --card-bg: #ffffff;
-  --card-inner-bg: #fafafa;
+* {
+  box-sizing: border-box;
 }
 
-/* =============================
-   기본 타이포 & 반응형 글자 크기 (기존 유지)
-   ============================= */
-html { font-size: 16px; }
+/* 컬러 변수 느낌으로 통일해서 사용 */
+:root {
+  --bg-body: #f5f5f7;
+  --bg-card: #ffffff;
+
+--bg-soft: #eef2f6;
+--primary-soft: #eef2f6;
+--primary: #d6e0ea;
+
+
+  --border: #e4dfe8;
+  --text-main: #111111;
+  --text-muted: #777777;
+
+  --shadow-soft: 0 6px 18px rgba(0, 0, 0, 0.05);
+}
+
+/* 기본 타이포 & 반응형 글자 크기 */
+html {
+  font-size: 16px;
+}
 
 @media (max-width: 600px) {
-  html { font-size: 15px; }
+  html {
+    font-size: 15px;
+  }
 }
 
-body{
+body {
   margin: 0;
   padding: 0;
   background: var(--bg-body);
   color: var(--text-main);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
     Arial, "Apple SD Gothic Neo", "Noto Sans KR", "맑은 고딕", sans-serif;
-  line-height: 1.5;
+  line-height: 1.6;
   word-break: keep-all;
 }
 
-/* 링크 기본 */
-a { text-decoration: none; color: inherit; }
-
-/* =============================
-   전역 헤딩 계층 (기존 유지, main 내부는 컬러만 변수로)
-   ============================= */
-body h1{
-  font-size: 2.2rem;
-  margin: 28px 0 18px;
-  text-align: center !important;
-  color: #111;
-  font-weight: 700;
+/* 링크 */
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
-body h2{
-  font-size: 1.6rem;
-  margin: 28px 0 12px;
-  color: #222;
-  font-weight: 700;
+a:hover {
+  text-decoration: underline;
 }
 
-body h3{
-  font-size: 1.4rem;
-  margin: 20px 0 10px;
-  color: #222;
-  font-weight: 600;
-}
-
-body h4{
-  font-size: 1.2rem;
-  margin: 16px 0 8px;
-  color: #333;
-  font-weight: 600;
-}
-
-/* 본문 텍스트 */
-body p,
-body li,
-body div,
-body span{
-  font-size: 1.1rem;
-  line-height: 1.65;
-  color: #333;
-}
-
-body p{ margin: 14px 0; }
-
-body li{
-  margin: 4px 0;
-  line-height: 1.55;
-}
-
-ul, ol{
-  margin: 12px 0 18px;
-  padding-left: 22px;
-}
-
-body .muted{
-  font-size: 0.95rem;
-  color: #666;
-}
-
-/* 예외 클래스(local-*) */
-.local-h2{ font-size: 1.3rem !important; }
-.local-h3{ font-size: 1.1rem !important; }
-.local-large{ font-size: 1.2rem !important; }
-.local-small{ font-size: 0.9rem !important; }
-.local-tight{ margin-bottom: 6px !important; }
-
-/* 기존 파란 강조를 분홍 계열 포인트로 */
-.local-accent{ color: #c2185b !important; }
-
-/* =============================
-   레이아웃 공통 (기존 유지 + 새 레이아웃 클래스 추가)
-   ============================= */
-
-/* 기존 호환 */
-.shell{
-  max-width: 880px;
-  margin: 0 auto;
-}
-
-/* 기존 페이지들이 main을 쓰고 있어서 유지 */
-main{
-  max-width: 880px;
-  margin: 0 auto;
-  padding: 24px 16px;
-}
-
-/* 새 레이아웃용 래퍼(원하면 HTML에서 page-wrap 사용) */
-.page-wrap{
-  max-width: 880px;
-  margin: 0 auto;
-  padding: 24px 16px 40px;
-}
-
-.sub{
-  margin: 0.25rem 0 0;
-  font-size: 1rem;
-  color: #555;
-}
-
-/* =============================
-   헤더 & 네비게이션 (새 레이아웃 적용)
-   ============================= */
-
-.site-header{
-  background: #fff;
-  border-bottom: 1px solid var(--border-light);
-}
-
-/* 기존 .site-header .shell 규칙과 충돌 안 나게 별도 래퍼 제공 */
-.site-header-inner{
-  max-width: 880px;
-  margin: 0 auto;
-  padding: 16px 16px 10px;
-}
-
-/* (선택) 기존 템플릿이 .site-header .shell만 쓰는 경우도 대비 */
-.site-header .shell{
-  max-width: 880px;
-  margin: 0 auto;
-  padding: 16px 16px 10px;
-}
-
-/* 타이틀은 항상 위, 메뉴는 아래 */
-.site-title-wrap{ margin-bottom: 12px; }
-
-.site-title-link{
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.site-logo-badge{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 8px;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  border: 1px solid var(--accent-pink-strong);
-  background: var(--accent-pink-soft);
-  font-weight: 600;
-}
-
-/* ✅ 최상단 메인 타이틀: 2배 키움 */
-.site-title-text{
-  font-size: 2.4rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
-
-@media (max-width: 600px){
-  .site-title-text{ font-size: 1.8rem; }
-}
-
-/* 네비게이션: 항상 타이틀 아래 줄 */
-.site-nav{
+/* 레이아웃 기본 골격 */
+.layout-page {
+  min-height: 100vh;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  flex-direction: column;
 }
 
-/* 메뉴 버튼 */
-.nav-link{
-  display: inline-flex;
+/* ============================
+   헤더
+   ============================ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid #e5e5ea;
+}
+
+.site-header-inner {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 10px 16px;
+  display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+}
+
+/* ✅ 좌측 상단 타이틀: 1.5배 */
+.site-title {
+  display: inline-block; /* 타이틀이 a 태그여도 안정 */
+  font-size: 1.5em;
+  line-height: 1.2;
+  font-weight: 700; /* 가독성 보정(필요 없으면 지워도 됨) */
+}
+
+@media (max-width: 600px) {
+  .site-title {
+    font-size: 1.25em;
+  }
+}
+
+.site-nav {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.site-nav a {
   padding: 6px 12px;
   border-radius: 999px;
-  border: 1px solid var(--accent-pink);
-  background: #fff;
   font-size: 0.9rem;
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease,
-    transform 0.05s ease;
+  border: 1px solid transparent;
+  background: transparent;
+  text-decoration: none;
 }
 
-.nav-link:hover,
-.nav-link:focus-visible{
-  background: var(--accent-pink);
-  border-color: var(--accent-pink-strong);
-  color: #111;
-  transform: translateY(-1px);
+.site-nav a:hover {
+  background: var(--primary-soft);
+  border-color: var(--primary);
 }
 
-.nav-link-active{
-  background: var(--accent-pink);
-  border-color: var(--accent-pink-strong);
-  color: #111;
+.site-nav a.is-active {
+  background: var(--primary);
+  border-color: var(--primary);
 }
 
-/* =============================
-   히어로 영역 (메인 인덱스에서만 쓰면 됨)
-   ============================= */
-.hero{
-  margin-top: 24px;
-  margin-bottom: 24px;
+/* ============================
+   메인
+   ============================ */
+.main-content {
+  flex: 1;
 }
 
-/* ✅ 본문 타이틀: 원래 느낌으로 줄임 */
-.hero-title{
-  font-size: 2.2rem;
-  line-height: 1.25;
-  margin: 0 0 12px;
-}
-
-@media (max-width: 600px){
-  .hero-title{ font-size: 1.8rem; }
-}
-
-.hero-subtitle{
-  margin: 0;
-  font-size: 1rem;
-  color: var(--text-muted);
-}
-
-/* =============================
-   섹션 카드 (새 스타일)
-   - 그림자 유지(요청)
-   ============================= */
-.section-card-grid{
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  margin-bottom: 32px;
-}
-
-.section-card{
-  border-radius: 16px;
-  border: 1px solid var(--border-light);
-  padding: 16px 18px 18px;
-  background: #fff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-}
-
-.section-title{
-  margin: 0 0 8px;
-  font-size: 1.05rem;
-}
-
-.section-desc{
-  margin: 0 0 16px;
-  font-size: 0.94rem;
-  color: var(--text-muted);
-}
-
-/* =============================
-   기존 섹션/카드 (기존 유지)
-   ============================= */
-.section{
-  border: 1px solid #e5e5e5;
-  border-radius: 12px;
-  padding: 20px 22px;
-  margin: 18px 0;
-  background: var(--card-bg);
-}
-
-.card{
-  border: 1px solid #e5e5e5;
-  border-radius: 10px;
-  padding: 14px 16px;
-  margin: 14px 0;
-  background: var(--card-inner-bg);
-}
-
-/* =============================
-   레이아웃 유틸 (기존 유지)
-   ============================= */
-.row{
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.row.between{ justify-content: space-between; }
-.row.gap{ gap: 10px; }
-
-.grid{
-  display: grid;
-  gap: 12px;
-}
-
-.grid.two{ grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-.grid.three{ grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
-
-@media (max-width: 640px){
-  .row{ flex-wrap: wrap; align-items: flex-start; }
-  .grid.two, .grid.three{ grid-template-columns: 1fr; }
-}
-
-/* =============================
-   버튼 스타일 (기존 .btn도 테마 반영)
-   ============================= */
-
-/* 새 버튼 클래스 */
-.btn-primary,
-.btn-outline{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 14px;
-  border-radius: 999px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease,
-    transform 0.05s ease;
-}
-
-.btn-primary{
-  background: var(--accent-pink);
-  border: 1px solid var(--accent-pink-strong);
-  color: #111;
-}
-
-.btn-primary:hover,
-.btn-primary:focus-visible{
-  background: var(--accent-pink-strong);
-  border-color: var(--accent-pink-strong);
-  transform: translateY(-1px);
-}
-
-.btn-outline{
-  background: #fff;
-  border: 1px solid var(--accent-pink);
-  color: #111;
-}
-
-.btn-outline:hover,
-.btn-outline:focus-visible{
-  background: var(--accent-pink-soft);
-  border-color: var(--accent-pink-strong);
-  transform: translateY(-1px);
-}
-
-/* 기존 .btn 호환: 테마만 분홍(회색기)으로 */
-.btn{
-  display: inline-block;
-  padding: 10px 16px;
-  border-radius: 12px;
-  border: 1px solid var(--accent-pink);
-  font-weight: 600;
-  font-size: 1rem;
-  color: #111;
-  background: #fff;
-  cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
-}
-
-.btn + .btn{ margin-left: 10px; }
-
-.btn:hover{
-  background: var(--accent-pink-soft);
-  border-color: var(--accent-pink-strong);
-  transform: translateY(-1px);
-}
-
-/* 기존 .btn.primary: 메인 버튼 */
-.btn.primary{
-  background: var(--accent-pink);
-  color: #111;
-  border-color: var(--accent-pink-strong);
-}
-
-.btn.primary:hover{
-  background: var(--accent-pink-strong);
-}
-
-/* 기존 ghost */
-.btn.ghost{
-  background: #fff;
-  border-color: var(--accent-pink);
-}
-
-.btn.ghost:hover{
-  background: var(--accent-pink-soft);
-  border-color: var(--accent-pink-strong);
-}
-
-.btn-desc{
-  font-size: 1rem;
-  margin: 6px 0 18px;
-  color: #333;
-}
-
-/* 기존 lightgrey -> soft로 */
-.btn-lightgrey{
-  padding: 8px 14px;
-  border-radius: 10px;
-  background: var(--accent-pink-soft);
-  border: 1px solid var(--accent-pink);
-}
-
-/* 메인으로 돌아가기 */
-.home-link-wrap{
-  max-width: 880px;
-  margin: 16px auto 0;
-  padding: 0 16px;
-  display: flex;
-  justify-content: flex-start;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.btn-home{
-  padding: 8px 16px;
-  border: 1px solid var(--accent-pink);
-  border-radius: 999px;
-  background: #fff;
-  font-size: 1rem;
-  white-space: nowrap;
-  transition: background 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
-}
-
-.btn-home:hover{
-  background: var(--accent-pink-soft);
-  border-color: var(--accent-pink-strong);
-  transform: translateY(-1px);
-}
-
-/* =============================
-   작성자 메모
-   ============================= */
-.author-note{
-  margin-top: 24px;
-  padding: 16px 18px;
-  border-radius: 16px;
-  border: 1px dashed var(--accent-pink-strong);
-  background: var(--accent-pink-soft);
-}
-
-.author-note-line{
-  margin: 4px 0;
-  font-size: 0.9rem;
-  color: var(--text-main);
-}
-
-/* =============================
-   푸터 (레이아웃은 새 스타일, 기존 호환)
-   ============================= */
-.site-footer{
-  border-top: 1px solid var(--border-light);
-  background: #fff;
-  margin-top: 32px;
-  padding: 0;
-  color: #444;
-}
-
-/* 기존 footer 내부에 .shell 쓰는 페이지 대비 */
-.site-footer .shell{
-  max-width: 880px;
+.page-wrap {
+  max-width: 1040px;
   margin: 0 auto;
-  padding: 10px 16px 16px;
+  padding: 24px 16px 32px;
 }
 
-/* 새 footer 텍스트 클래스 */
-.footer-text{
-  max-width: 880px;
+/* 섹션 제목 공통 */
+.page-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.page-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+/* ============================
+   푸터
+   ============================ */
+.site-footer {
+  border-top: 1px solid #e5e5ea;
+  background: #ffffff;
+}
+
+.site-footer-inner {
+  max-width: 1040px;
   margin: 0 auto;
   padding: 10px 16px 16px;
   font-size: 0.8rem;
-  color: var(--text-muted);
+  color: #666666;
   text-align: center;
 }
 
-/* 기존 footer p 여백 유지 */
-.site-footer p{ margin: 4px 0; }
-
-/* =============================
-   입력 UI (기존 유지 + 포커스 분홍)
-   ============================= */
-input, select, button, textarea{ font: inherit; }
-
-input[type="text"],
-input[type="number"],
-input[type="time"],
-input[type="date"],
-select,
-textarea{
-  padding: 10px 12px;
-  border: 1px solid #d9d9e3;
-  border-radius: 12px;
-  background: #f9fafb;
-  outline: none;
-  min-width: 0;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.02);
+/* ============================
+   1) 홈 - 카드형 레이아웃
+   ============================ */
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
 }
 
-input:focus,
-select:focus,
-textarea:focus{
-  border-color: var(--accent-pink-strong);
-  box-shadow: 0 0 0 2px rgba(230, 201, 214, 0.35);
-  background: #fff;
+@media (max-width: 900px) {
+  .home-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
-input:disabled,
-select:disabled,
-textarea:disabled{
-  background: #f6f7fb;
-  color: #888;
+@media (max-width: 600px) {
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-.numeric{ text-align: right; }
-
-/* 모든 셀렉트 박스가 그리드 밖으로 넘치지 않도록 강제 */
-.field select{
-  max-width: 100%;
-  width: 100%;
-  box-sizing: border-box;
+.home-card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-/* =============================
-   구분선(hr) (기존 유지)
-   ============================= */
-hr{
-  border-top: 1px solid #ddd;
-  margin: 26px 0;
-  opacity: 0.9;
+.home-card-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  background: var(--primary-soft);
+  color: #333333;
 }
 
-body h2 + hr{ margin-top: 10px !important; }
-
-/* =============================
-   테이블 스타일 (기존 유지)
-   ============================= */
-.table-wrap,
-.table-wrapper{
-  width: 100%;
-  max-width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  margin: 12px 0;
-  padding-bottom: 6px;
-}
-
-.table-wrap table,
-.table-wrapper table{
-  min-width: 800px;
-  border-collapse: collapse;
-}
-
-.sheetlike{
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 1rem;
-  background: #fff;
-}
-
-.sheetlike th,
-.sheetlike td{
-  border: 1px solid #e5e7eb;
-  padding: 8px 10px;
-}
-
-.sheetlike th{
-  background: #f9fafb;
+.home-card-title {
+  font-size: 1.02rem;
   font-weight: 600;
 }
 
-.simple-table th{ text-align: left; }
-
-.simple-table td{
-  text-align: right;
-  padding-right: 4px;
+.home-card-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
 }
 
-.note{
-  margin-top: 8px;
+.home-card-footer {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ============================
+   2) 문서 포털 레이아웃
+   ============================ */
+.docs-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .docs-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.docs-sidebar {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 14px 12px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+  position: sticky;
+  top: 60px;
+  height: fit-content;
+}
+
+.docs-sidebar-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.docs-nav-group {
+  margin-bottom: 10px;
+}
+
+.docs-nav-group-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 8px 4px 4px;
+  color: #555555;
+}
+
+.docs-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.docs-nav-list li a {
+  display: block;
+  padding: 6px 8px;
+  border-radius: 10px;
+  font-size: 0.86rem;
+  text-decoration: none;
+}
+
+.docs-nav-list li a:hover {
+  background: var(--primary-soft);
+}
+
+.docs-nav-list li a.is-current {
+  background: var(--primary);
+}
+
+/* 포털 본문 컨테이너 */
+.docs-content {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 20px 22px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+}
+
+/* ============================
+   3) A4 문서뷰 스타일
+   ============================ */
+.doc-a4-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.doc-a4 {
+  max-width: 760px;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 28px 26px 32px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border);
+}
+
+.doc-a4-header {
+  margin-bottom: 18px;
+}
+
+.doc-a4-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.doc-a4-meta {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* 문서 안의 기본 타이포 */
+.doc-a4 h2 {
+  font-size: 1.1rem;
+  margin: 18px 0 6px;
+}
+
+.doc-a4 h3 {
   font-size: 1rem;
-  color: #555;
+  margin: 14px 0 4px;
 }
 
-/* =============================
-   main 내부 헤딩 컬러(변수 적용)
-   ============================= */
-main h1, main h2, main h3, main h4{
-  color: var(--text-main);
+.doc-a4 p {
+  margin: 6px 0;
+  font-size: 0.92rem;
 }
+
+.doc-a4 ul {
+  padding-left: 20px;
+  margin: 6px 0;
+  font-size: 0.92rem;
+}
+
+/* 이미지가 들어갈 때 여백 */
+.doc-a4-figure {
+  margin: 12px 0;
+  text-align: center;
+}
+
+.doc-a4-figure img {
+  max-width: 100%;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+/* ============================
+   4) 탭 UI 스타일
+   ============================ */
+.tabs-root {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 18px 18px 22px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+}
+
+.tabs-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  border-bottom: 1px solid #e3e3ea;
+  padding-bottom: 6px;
+  margin-bottom: 10px;
+}
+
+.tab-button {
+  border: none;
+  background: transparent;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.tab-button:hover {
+  background: var(--primary-soft);
+}
+
+.tab-button.is-active {
+  background: var(--primary);
+}
+
+.tab-panel {
+  display: none;
+  font-size: 0.92rem;
+}
+
+.tab-panel.is-active {
+  display: block;
+}
+
+/* ============================
+   5) FAQ 아코디언 스타일
+   ============================ */
+.faq-list {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.faq-item {
+  background: var(--bg-card);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+}
+
+.faq-question {
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq-question span {
+  flex: 1;
+}
+
+.faq-icon {
+  font-size: 1.1rem;
+  margin-left: 8px;
+}
+
+.faq-answer {
+  display: none;
+  padding: 0 16px 12px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.faq-item.is-open .faq-answer {
+  display: block;
+}
+
+/* ============================
+   유틸
+   ============================ */
+.badge-soft {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  background: var(--primary-soft);
+}
+
